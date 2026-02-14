@@ -125,72 +125,72 @@ export const BirthdayCardGenerator: React.FC<Props> = ({ age, name, lang, extern
 
       <div className="grid lg:grid-cols-2 gap-8">
         {/* Preview Section - Enhanced Visuals */}
-        <div className="flex flex-col items-center justify-center bg-gray-100 dark:bg-black/20 p-4 rounded-3xl border border-gray-200 dark:border-white/5">
+        <div className="flex flex-col items-center justify-center bg-gray-100 dark:bg-black/20 p-2 sm:p-4 rounded-3xl border border-gray-200 dark:border-white/5">
             <motion.div 
                 ref={cardRef}
                 layout
-                className={`relative w-full max-w-[320px] sm:max-w-sm aspect-[4/5] overflow-hidden shadow-2xl flex flex-col items-center justify-between text-center bg-gradient-to-br ${selectedGradient.gradient}`}
+                className={`relative w-full max-w-[300px] sm:max-w-sm aspect-[4/5] overflow-hidden shadow-2xl flex flex-col items-center justify-between text-center bg-gradient-to-br ${selectedGradient.gradient}`}
                 style={{ borderRadius: '24px' }}
             >
                 {/* Decorative Pattern Overlay */}
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 mix-blend-overlay pointer-events-none"></div>
 
                 {/* Top Decoration */}
-                <div className="w-full p-6 pt-8 z-10 flex flex-col items-center">
-                    <div className="bg-white/20 backdrop-blur-md px-4 py-1 rounded-full border border-white/30 shadow-lg mb-4">
-                         <p className="text-xs font-bold text-white tracking-widest uppercase">
+                <div className="w-full p-4 pt-6 sm:p-6 sm:pt-8 z-10 flex flex-col items-center">
+                    <div className="bg-white/20 backdrop-blur-md px-3 py-1 sm:px-4 rounded-full border border-white/30 shadow-lg mb-2 sm:mb-4">
+                         <p className="text-[10px] sm:text-xs font-bold text-white tracking-widest uppercase">
                             {lang === 'en' ? 'Special Day' : 'শুভ দিন'}
                          </p>
                     </div>
                     
-                    <h2 className={`text-3xl sm:text-4xl md:text-5xl ${selectedGradient.textColor} drop-shadow-[0_4px_4px_rgba(0,0,0,0.3)] leading-tight ${fontClassMap[selectedFont]}`}>
+                    <h2 className={`text-3xl sm:text-5xl ${selectedGradient.textColor} drop-shadow-[0_4px_4px_rgba(0,0,0,0.3)] leading-tight ${fontClassMap[selectedFont]}`}>
                          {lang === 'en' ? 'Happy Birthday' : 'শুভ জন্মদিন'}
                     </h2>
-                    <h3 className={`text-2xl md:text-3xl font-bold text-white mt-2 drop-shadow-md ${fontClassMap.fun}`}>
+                    <h3 className={`text-xl sm:text-3xl font-bold text-white mt-1 sm:mt-2 drop-shadow-md break-words max-w-full px-2 ${fontClassMap.fun}`}>
                         {name}
                     </h3>
                 </div>
 
                 {/* Photo Area with Glow */}
-                <div className="relative z-10 group">
+                <div className="relative z-10 group flex-shrink-0">
                     <div className="absolute inset-0 bg-white/30 rounded-full blur-xl animate-pulse"></div>
-                    <div className="relative w-40 h-40 rounded-full border-[6px] border-white/90 shadow-2xl overflow-hidden bg-white/10 flex items-center justify-center transform group-hover:scale-105 transition-transform duration-500">
+                    <div className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-full border-[4px] sm:border-[6px] border-white/90 shadow-2xl overflow-hidden bg-white/10 flex items-center justify-center transform group-hover:scale-105 transition-transform duration-500">
                         {userImage ? (
                             <img src={userImage} alt="Profile" className="w-full h-full object-cover" />
                         ) : (
-                            <Gift size={64} className="text-white/80" />
+                            <Gift size={48} className="text-white/80 sm:w-16 sm:h-16" />
                         )}
                     </div>
                     {/* Floating Age Badge */}
-                    <div className="absolute -bottom-2 -right-2 bg-yellow-400 text-yellow-900 w-14 h-14 rounded-full flex items-center justify-center border-4 border-white shadow-lg animate-bounce">
-                        <span className="font-bold text-lg">{age.years}</span>
+                    <div className="absolute -bottom-1 -right-1 sm:-bottom-2 sm:-right-2 bg-yellow-400 text-yellow-900 w-10 h-10 sm:w-14 sm:h-14 rounded-full flex items-center justify-center border-2 sm:border-4 border-white shadow-lg animate-bounce">
+                        <span className="font-bold text-sm sm:text-lg">{age.years}</span>
                     </div>
                 </div>
 
                 {/* Bottom Message */}
-                <div className="w-full p-6 pb-8 z-10">
-                    <div className="bg-black/10 backdrop-blur-sm rounded-xl p-4 border border-white/10">
-                         <p className={`text-white/95 text-sm md:text-base italic leading-relaxed ${fontClassMap.sans}`}>
+                <div className="w-full p-4 pb-6 sm:p-6 sm:pb-8 z-10">
+                    <div className="bg-black/10 backdrop-blur-sm rounded-xl p-3 sm:p-4 border border-white/10">
+                         <p className={`text-white/95 text-xs sm:text-base italic leading-relaxed ${fontClassMap.sans}`}>
                             "{statusText}"
                         </p>
                     </div>
-                    <div className="mt-4 opacity-70">
-                        <p className="text-[10px] text-white uppercase tracking-[0.2em] font-bold">Generated by AgeClock</p>
+                    <div className="mt-2 sm:mt-4 opacity-70">
+                        <p className="text-[8px] sm:text-[10px] text-white uppercase tracking-[0.2em] font-bold">Generated by AgeClock</p>
                     </div>
                 </div>
 
                 {/* Floating SVG Decorations */}
                 <div className="absolute top-10 left-4 opacity-80 animate-float">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="white" fillOpacity="0.4"/></svg>
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="sm:w-10 sm:h-10"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="white" fillOpacity="0.4"/></svg>
                 </div>
                 <div className="absolute bottom-20 right-4 opacity-60 animate-float" style={{ animationDelay: '2s' }}>
-                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" fill="white" fillOpacity="0.3"/></svg>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="sm:w-8 sm:h-8"><circle cx="12" cy="12" r="10" fill="white" fillOpacity="0.3"/></svg>
                 </div>
                 <div className="absolute top-1/2 left-2 opacity-50 animate-float" style={{ animationDelay: '1s' }}>
-                     <span className="text-2xl">🎉</span>
+                     <span className="text-xl sm:text-2xl">🎉</span>
                 </div>
                 <div className="absolute top-1/2 right-2 opacity-50 animate-float" style={{ animationDelay: '3s' }}>
-                     <span className="text-2xl">🎈</span>
+                     <span className="text-xl sm:text-2xl">🎈</span>
                 </div>
 
             </motion.div>
@@ -268,11 +268,14 @@ export const BirthdayCardGenerator: React.FC<Props> = ({ age, name, lang, extern
                  </div>
             </div>
 
-            <div className="pt-4 flex gap-4">
-                <GlassButton onClick={handleDownload} className="flex-1" icon={<Download size={18} />}>
+            <div className="pt-4 flex flex-col sm:flex-row gap-4">
+                <GlassButton onClick={handleDownload} className="flex-1 w-full justify-center" icon={<Download size={18} />}>
                     {isDownloading ? 'Processing...' : t.downloadCard}
                 </GlassButton>
-                <GlassButton onClick={handleShare} variant="secondary" className="flex-none px-4" icon={<Share2 size={18} />} />
+                <GlassButton onClick={handleShare} variant="secondary" className="flex-none px-4 w-full sm:w-auto justify-center" icon={<Share2 size={18} />}>
+                    {/* Added text for mobile since just icon might be too small click area */}
+                    <span className="sm:hidden ml-2">{lang === 'en' ? 'Share' : 'শেয়ার'}</span>
+                </GlassButton>
             </div>
         </div>
       </div>

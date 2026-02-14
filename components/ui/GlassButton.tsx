@@ -7,7 +7,7 @@ interface GlassButtonProps extends HTMLMotionProps<"button"> {
 }
 
 export const GlassButton: React.FC<GlassButtonProps> = ({ children, variant = 'primary', icon, className, ...props }) => {
-  const baseStyle = "relative overflow-hidden px-6 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg backdrop-blur-md";
+  const baseStyle = "relative overflow-hidden px-6 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg backdrop-blur-md whitespace-normal h-auto min-h-[44px]";
   
   const variants = {
     primary: "bg-white/80 dark:bg-white/20 text-gray-900 dark:text-white border border-gray-200 dark:border-white/30 hover:bg-white dark:hover:bg-white/30 hover:scale-105 active:scale-95",
@@ -21,8 +21,8 @@ export const GlassButton: React.FC<GlassButtonProps> = ({ children, variant = 'p
       className={`${baseStyle} ${variants[variant]} ${className || ''}`}
       {...props}
     >
-      {icon && <span className="text-xl">{icon}</span>}
-      {children}
+      {icon && <span className="text-xl shrink-0">{icon}</span>}
+      <span className="break-words">{children}</span>
     </motion.button>
   );
 };

@@ -163,30 +163,30 @@ function App() {
         )}
       </AnimatePresence>
 
-      <div className={`relative z-10 max-w-4xl mx-auto p-4 md:p-8 ${lang === 'bn' ? 'font-bangla' : 'font-sans'}`}>
+      <div className={`relative z-10 max-w-4xl mx-auto p-3 sm:p-4 md:p-8 ${lang === 'bn' ? 'font-bangla' : 'font-sans'}`}>
         
         {/* Header Section */}
-        <header className="flex justify-between items-center mb-10">
+        <header className="flex justify-between items-center mb-6 md:mb-10">
           <div className="flex items-center gap-3">
-             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#7F00FF] to-[#E100FF] flex items-center justify-center text-white shadow-lg">
-                <Clock size={28} className="animate-pulse" />
+             <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br from-[#7F00FF] to-[#E100FF] flex items-center justify-center text-white shadow-lg shrink-0">
+                <Clock size={24} className="md:w-7 md:h-7 animate-pulse" />
              </div>
              <div>
-               <h1 className={`text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r ${theme === 'dark' ? 'from-white to-gray-400' : 'from-gray-800 to-gray-500'}`}>
+               <h1 className={`text-xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r ${theme === 'dark' ? 'from-white to-gray-400' : 'from-gray-800 to-gray-500'}`}>
                  AgeClock
                </h1>
-               <p className={`text-xs md:text-sm ${theme === 'dark' ? 'text-white/60' : 'text-gray-500'}`}>
+               <p className={`text-[10px] md:text-sm ${theme === 'dark' ? 'text-white/60' : 'text-gray-500'}`}>
                  {t.subtitle}
                </p>
              </div>
           </div>
 
-          <div className="flex gap-3">
-            <button onClick={toggleLang} className="p-3 rounded-xl glass-card text-gray-800 dark:text-white hover:bg-white/40 dark:hover:bg-white/20 transition-all active:scale-95">
-              <span className="font-bold">{lang === 'en' ? 'EN' : 'BN'}</span>
+          <div className="flex gap-2 sm:gap-3">
+            <button onClick={toggleLang} className="p-2 md:p-3 rounded-xl glass-card text-gray-800 dark:text-white hover:bg-white/40 dark:hover:bg-white/20 transition-all active:scale-95">
+              <span className="font-bold text-xs md:text-base">{lang === 'en' ? 'EN' : 'BN'}</span>
             </button>
-            <button onClick={toggleTheme} className="p-3 rounded-xl glass-card text-gray-800 dark:text-white hover:bg-white/40 dark:hover:bg-white/20 transition-all active:scale-95">
-              {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+            <button onClick={toggleTheme} className="p-2 md:p-3 rounded-xl glass-card text-gray-800 dark:text-white hover:bg-white/40 dark:hover:bg-white/20 transition-all active:scale-95">
+              {theme === 'dark' ? <Sun size={18} className="md:w-5 md:h-5"/> : <Moon size={18} className="md:w-5 md:h-5"/>}
             </button>
           </div>
         </header>
@@ -195,12 +195,12 @@ function App() {
         <motion.div 
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="glass-card rounded-3xl p-6 md:p-8 mb-8 relative overflow-hidden"
+          className="glass-card rounded-3xl p-5 md:p-8 mb-6 md:mb-8 relative overflow-hidden"
         >
           {/* Decorative Gradient Line */}
           <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#00C6FF] to-[#E100FF]" />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             <div className="space-y-2">
                <label className={`text-sm font-medium ml-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
                  {lang === 'en' ? 'Name (Optional)' : 'নাম (ঐচ্ছিক)'}
@@ -212,7 +212,7 @@ function App() {
                     placeholder={t.namePlaceholder}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full pl-12 pr-4 py-4 rounded-xl glass-input text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-purple-500 transition-all"
+                    className="w-full pl-12 pr-4 py-3 md:py-4 rounded-xl glass-input text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-purple-500 transition-all text-sm md:text-base"
                  />
                </div>
             </div>
@@ -227,16 +227,16 @@ function App() {
                     type="date" 
                     value={dob}
                     onChange={(e) => setDob(e.target.value)}
-                    className="w-full pl-12 pr-4 py-4 rounded-xl glass-input text-gray-800 dark:text-gray-400 focus:ring-2 focus:ring-purple-500 transition-all [color-scheme:light] dark:[color-scheme:dark]"
+                    className="w-full pl-12 pr-4 py-3 md:py-4 rounded-xl glass-input text-gray-800 dark:text-gray-400 focus:ring-2 focus:ring-purple-500 transition-all [color-scheme:light] dark:[color-scheme:dark] text-sm md:text-base"
                  />
                </div>
             </div>
           </div>
 
-          <div className="mt-8">
+          <div className="mt-6 md:mt-8">
              <GlassButton 
                onClick={handleCalculate} 
-               className="w-full py-4 text-lg bg-gradient-to-r from-[#7F00FF] to-[#E100FF] text-white hover:opacity-90 border-none shadow-purple-500/30"
+               className="w-full py-3 md:py-4 text-base md:text-lg bg-gradient-to-r from-[#7F00FF] to-[#E100FF] text-white hover:opacity-90 border-none shadow-purple-500/30"
              >
                {loading ? (
                  <span className="animate-pulse">Calculating...</span>
@@ -248,7 +248,7 @@ function App() {
         </motion.div>
 
         {/* Ad Space - Top Banner */}
-        <div className="mb-8">
+        <div className="mb-6 md:mb-8">
             <AdBanner slot="top-banner" />
         </div>
 
@@ -260,11 +260,11 @@ function App() {
                initial={{ opacity: 0, scale: 0.95 }}
                animate={{ opacity: 1, scale: 1 }}
                exit={{ opacity: 0, scale: 0.9 }}
-               className="space-y-8"
+               className="space-y-6 md:space-y-8"
             >
               {/* Greeting */}
               <div className="text-center space-y-2">
-                <h2 className={`text-3xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
+                <h2 className={`text-2xl md:text-3xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
                   {result.isBirthday ? `🎉 ${t.happyBirthday}` : `${t.greeting}, ${name || (lang === 'en' ? 'Friend' : 'বন্ধু')}!`}
                 </h2>
                 {result.isBirthday && (
@@ -273,7 +273,7 @@ function App() {
               </div>
 
               {/* Main Age Cards - Responsive Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
                  <ResultCard 
                     label={t.years} 
                     value={result.years} 
@@ -298,54 +298,54 @@ function App() {
               </div>
 
               {/* Secondary Details - Responsive Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                  <div className="glass-card p-4 rounded-2xl flex items-center gap-4 hover:bg-white/40 dark:hover:bg-white/10 transition-colors">
-                    <div className="p-3 bg-indigo-500/20 text-indigo-500 dark:text-indigo-400 rounded-full">
+                    <div className="p-3 bg-indigo-500/20 text-indigo-500 dark:text-indigo-400 rounded-full shrink-0">
                       <Star size={20} />
                     </div>
-                    <div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold">{t.zodiac}</p>
-                      <p className="text-lg font-semibold text-gray-800 dark:text-white">{result.zodiac}</p>
+                    <div className="min-w-0">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold truncate">{t.zodiac}</p>
+                      <p className="text-lg font-semibold text-gray-800 dark:text-white truncate">{result.zodiac}</p>
                     </div>
                  </div>
 
                  <div className="glass-card p-4 rounded-2xl flex items-center gap-4 hover:bg-white/40 dark:hover:bg-white/10 transition-colors">
-                    <div className="p-3 bg-green-500/20 text-green-600 dark:text-green-400 rounded-full">
+                    <div className="p-3 bg-green-500/20 text-green-600 dark:text-green-400 rounded-full shrink-0">
                       <Globe size={20} />
                     </div>
-                    <div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold">{t.totalDays}</p>
-                      <p className="text-lg font-semibold text-gray-800 dark:text-white">{result.totalDays.toLocaleString()}</p>
+                    <div className="min-w-0">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold truncate">{t.totalDays}</p>
+                      <p className="text-lg font-semibold text-gray-800 dark:text-white truncate">{result.totalDays.toLocaleString()}</p>
                     </div>
                  </div>
 
                  <div className="glass-card p-4 rounded-2xl flex items-center gap-4 hover:bg-white/40 dark:hover:bg-white/10 transition-colors">
-                    <div className="p-3 bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 rounded-full">
+                    <div className="p-3 bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 rounded-full shrink-0">
                       <Gift size={20} />
                     </div>
-                    <div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold">{t.nextBirthday}</p>
-                      <p className="text-lg font-semibold text-gray-800 dark:text-white">
+                    <div className="min-w-0">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold truncate">{t.nextBirthday}</p>
+                      <p className="text-lg font-semibold text-gray-800 dark:text-white truncate">
                         {result.nextBirthdayDays === 0 ? (lang === 'en' ? 'Today!' : 'আজ!') : `${result.nextBirthdayDays} ${t.days}`}
                       </p>
                     </div>
                  </div>
 
                  <div className="glass-card p-4 rounded-2xl flex items-center gap-4 hover:bg-white/40 dark:hover:bg-white/10 transition-colors">
-                    <div className="p-3 bg-red-500/20 text-red-500 dark:text-red-400 rounded-full">
+                    <div className="p-3 bg-red-500/20 text-red-500 dark:text-red-400 rounded-full shrink-0">
                       <Heart size={20} />
                     </div>
-                    <div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold">{t.birthDayName}</p>
-                      <p className="text-lg font-semibold text-gray-800 dark:text-white">{result.birthDayName}</p>
+                    <div className="min-w-0">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold truncate">{t.birthDayName}</p>
+                      <p className="text-lg font-semibold text-gray-800 dark:text-white truncate">{result.birthDayName}</p>
                     </div>
                  </div>
               </div>
               
               {/* Extra Stats - Stacked on Mobile, Grid on Desktop */}
-              <div className="glass-card rounded-2xl p-6">
+              <div className="glass-card rounded-2xl p-5 md:p-6">
                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-4 text-center divide-y sm:divide-y-0 sm:divide-x divide-gray-300 dark:divide-white/10">
-                    <div className="px-4 pb-2 sm:pb-0">
+                    <div className="px-4 pb-4 sm:pb-0">
                        <p className="text-xs text-gray-500 dark:text-gray-400 uppercase mb-1">{t.weeks}</p>
                        <p className="text-lg font-bold text-gray-800 dark:text-white">{(Math.floor(result.totalDays / 7)).toLocaleString()}</p>
                     </div>
@@ -353,7 +353,7 @@ function App() {
                        <p className="text-xs text-gray-500 dark:text-gray-400 uppercase mb-1">{t.hours}</p>
                        <p className="text-lg font-bold text-gray-800 dark:text-white">{(result.totalDays * 24).toLocaleString()}</p>
                     </div>
-                    <div className="px-4 pt-2 sm:pt-0">
+                    <div className="px-4 pt-4 sm:pt-0">
                        <p className="text-xs text-gray-500 dark:text-gray-400 uppercase mb-1">{t.minutes}</p>
                        <p className="text-lg font-bold text-gray-800 dark:text-white">{(result.totalDays * 24 * 60).toLocaleString()}</p>
                     </div>
@@ -391,11 +391,11 @@ function App() {
         </AnimatePresence>
 
         {!result && !loading && (
-          <div className="text-center mt-20 opacity-50">
-            <div className="inline-block p-6 rounded-full bg-white/40 dark:bg-white/5 mb-4 animate-pulse">
-               <Calculator size={48} className="text-gray-400 dark:text-white" />
+          <div className="text-center mt-12 md:mt-20 opacity-50">
+            <div className="inline-block p-4 md:p-6 rounded-full bg-white/40 dark:bg-white/5 mb-4 animate-pulse">
+               <Calculator size={40} className="md:w-12 md:h-12 text-gray-400 dark:text-white" />
             </div>
-            <p className="text-gray-500 dark:text-gray-400">{lang === 'en' ? 'Enter your details to begin' : 'শুরু করতে আপনার তথ্য দিন'}</p>
+            <p className="text-sm md:text-base text-gray-500 dark:text-gray-400">{lang === 'en' ? 'Enter your details to begin' : 'শুরু করতে আপনার তথ্য দিন'}</p>
           </div>
         )}
 
