@@ -16,6 +16,9 @@ import { BirthdayCardGenerator } from './components/BirthdayCardGenerator';
 import { AdBanner, AdPopup, MoreAppsButton } from './components/AdUnit';
 import { CookieConsent, LegalFooter } from './components/Legal';
 
+// Flower Emojis for the falling animation
+const FLOWERS = ['🌸', '🌺', '🌻', '🌹', '🌷', '💐', '🌼', '🏵️'];
+
 function App() {
   // State
   const [name, setName] = useState('');
@@ -24,7 +27,8 @@ function App() {
   const [lang, setLang] = useState<Language>('en');
   const [theme, setTheme] = useState<ThemeMode>('dark');
   const [loading, setLoading] = useState(false);
-  const [generatedStatus, setGeneratedStatus] = useState(''); // Shared status state
+  const [generatedStatus, setGeneratedStatus] = useState('');
+  const [showFlowers, setShowFlowers] = useState(false); // State for flower animation
   const resultRef = useRef<HTMLDivElement>(null);
 
   // Load Persisted Data
@@ -48,7 +52,7 @@ function App() {
   // Lang Handling
   useEffect(() => {
     localStorage.setItem('lang', lang);
-    setGeneratedStatus(''); // Reset shared status on lang change
+    setGeneratedStatus('');
   }, [lang]);
 
   const toggleTheme = () => setTheme(prev => prev === 'light' ? 'dark' : 'light');
@@ -58,12 +62,12 @@ function App() {
     if (!dob) return;
     setLoading(true);
     setResult(null);
+    setShowFlowers(false); // Reset flowers
 
-    // Track usage for ads logic
+    // Track usage
     const count = parseInt(sessionStorage.getItem('calculateCount') || '0');
     sessionStorage.setItem('calculateCount', (count + 1).toString());
 
-    // Simulate smooth calculation loading
     setTimeout(() => {
       try {
         const res = calculateAgeLogic(dob, lang);
@@ -71,6 +75,7 @@ function App() {
         
         if (res.isBirthday) {
           fireConfetti();
+          triggerFlowers(); // Trigger the falling flowers
         }
       } catch (e) {
         console.error(e);
@@ -79,20 +84,21 @@ function App() {
     }, 800);
   };
 
+  const triggerFlowers = () => {
+    setShowFlowers(true);
+    // Stop flowers after 8 seconds
+    setTimeout(() => setShowFlowers(false), 8000);
+  };
+
   const fireConfetti = () => {
     const duration = 3000;
     const animationEnd = Date.now() + duration;
     const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-
     const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
 
     const interval: any = setInterval(function() {
       const timeLeft = animationEnd - Date.now();
-
-      if (timeLeft <= 0) {
-        return clearInterval(interval);
-      }
-
+      if (timeLeft <= 0) return clearInterval(interval);
       const particleCount = 50 * (timeLeft / duration);
       confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
       confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
@@ -134,6 +140,28 @@ function App() {
            </>
         )}
       </div>
+
+      {/* Flower Animation Container */}
+      <AnimatePresence>
+        {showFlowers && (
+          <div className="flower-container">
+            {Array.from({ length: 30 }).map((_, i) => (
+              <div 
+                key={i} 
+                className="flower"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  animationDuration: `${Math.random() * 3 + 4}s`,
+                  animationDelay: `${Math.random() * 5}s`,
+                  opacity: Math.random() * 0.5 + 0.5
+                }}
+              >
+                {FLOWERS[Math.floor(Math.random() * FLOWERS.length)]}
+              </div>
+            ))}
+          </div>
+        )}
+      </AnimatePresence>
 
       <div className={`relative z-10 max-w-4xl mx-auto p-4 md:p-8 ${lang === 'bn' ? 'font-bangla' : 'font-sans'}`}>
         
@@ -339,13 +367,13 @@ function App() {
                  </GlassButton>
               </div>
 
-              {/* Status Generator - Updated to pass callback */}
+              {/* Status Generator */}
               <StatusGenerator 
                 lang={lang} 
                 onStatusChange={(text) => setGeneratedStatus(text)} 
               />
 
-              {/* Birthday Card Generator - Updated to receive external status */}
+              {/* Birthday Card Generator - Premium Template */}
               <BirthdayCardGenerator 
                 age={result} 
                 name={name} 

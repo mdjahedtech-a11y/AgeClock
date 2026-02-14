@@ -17,6 +17,8 @@ export const CARD_GRADIENTS: CardStyle[] = [
   { id: '3', gradient: 'from-gray-900 via-purple-900 to-violet-800', textColor: 'text-white', name: 'Midnight' },
   { id: '4', gradient: 'from-yellow-400 via-orange-400 to-red-400', textColor: 'text-white', name: 'Citrus' },
   { id: '5', gradient: 'from-pink-300 via-purple-300 to-indigo-400', textColor: 'text-white', name: 'Cotton Candy' },
+  { id: '6', gradient: 'from-amber-200 via-yellow-400 to-orange-500', textColor: 'text-white', name: 'Golden Hour' },
+  { id: '7', gradient: 'from-rose-500 via-purple-500 to-indigo-600', textColor: 'text-white', name: 'Neon Dreams' },
 ];
 
 export const CARD_FONTS = [

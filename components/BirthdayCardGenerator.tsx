@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import html2canvas from 'html2canvas';
-import { Download, Share2, Upload, Palette, Type, Check } from 'lucide-react';
+import { Download, Share2, Upload, Palette, Type, Check, Gift } from 'lucide-react';
 import { Language, CalculatedAge, FontStyle } from '../types';
 import { CARD_GRADIENTS, CARD_FONTS, TRANSLATIONS, BIRTHDAY_QUOTES } from '../utils/data';
 import { GlassButton } from './ui/GlassButton';
@@ -24,7 +24,6 @@ export const BirthdayCardGenerator: React.FC<Props> = ({ age, name, lang, extern
 
   const t = TRANSLATIONS[lang];
 
-  // Sync with StatusGenerator
   useEffect(() => {
     if (externalStatus) {
       setStatusText(externalStatus);
@@ -34,7 +33,7 @@ export const BirthdayCardGenerator: React.FC<Props> = ({ age, name, lang, extern
   useEffect(() => {
       const executeDownload = () => {
           if (pendingDownload && cardRef.current) {
-              setPendingDownload(false); // Reset flag
+              setPendingDownload(false);
               performDownload();
           }
       };
@@ -57,15 +56,19 @@ export const BirthdayCardGenerator: React.FC<Props> = ({ age, name, lang, extern
       if (cardRef.current) {
         setIsDownloading(true);
         try {
+            // Wait for images to load before capturing (though usually dataURLs are instant)
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
             const canvas = await html2canvas(cardRef.current, {
-            scale: 2, // High resolution
-            useCORS: true,
-            backgroundColor: null,
+                scale: 3, // Higher scale for premium quality
+                useCORS: true,
+                backgroundColor: null,
+                logging: false,
             });
             
             const link = document.createElement('a');
-            link.download = `ageclock-card-${name || 'user'}-${new Date().getFullYear()}.png`;
-            link.href = canvas.toDataURL('image/png');
+            link.download = `Birthday-Card-${name || 'AgeClock'}.png`;
+            link.href = canvas.toDataURL('image/png', 1.0);
             link.click();
         } catch (err) {
             console.error("Download failed", err);
@@ -83,14 +86,14 @@ export const BirthdayCardGenerator: React.FC<Props> = ({ age, name, lang, extern
   const handleShare = async () => {
      if (cardRef.current) {
       try {
-        const canvas = await html2canvas(cardRef.current, { scale: 2, backgroundColor: null });
+        const canvas = await html2canvas(cardRef.current, { scale: 3, backgroundColor: null });
         canvas.toBlob(async (blob) => {
             if (!blob) return;
-            const file = new File([blob], "ageclock-card.png", { type: "image/png" });
+            const file = new File([blob], "birthday-card.png", { type: "image/png" });
             if (navigator.share) {
                 await navigator.share({
-                    title: 'Birthday Card',
-                    text: `Check out this birthday card for ${name || 'Friend'}!`,
+                    title: 'Birthday Wish',
+                    text: `Happy Birthday ${name}!`,
                     files: [file]
                 });
             } else {
@@ -121,51 +124,80 @@ export const BirthdayCardGenerator: React.FC<Props> = ({ age, name, lang, extern
       </div>
 
       <div className="grid lg:grid-cols-2 gap-8">
-        {/* Preview Section - Keep as is for visual accuracy */}
-        <div className="flex flex-col items-center">
+        {/* Preview Section - Enhanced Visuals */}
+        <div className="flex flex-col items-center justify-center bg-gray-100 dark:bg-black/20 p-4 rounded-3xl border border-gray-200 dark:border-white/5">
             <motion.div 
                 ref={cardRef}
                 layout
-                className={`relative w-full aspect-[4/5] sm:aspect-[4/3] max-w-md rounded-3xl overflow-hidden shadow-2xl p-6 flex flex-col items-center justify-center text-center bg-gradient-to-br ${selectedGradient.gradient}`}
+                className={`relative w-full max-w-sm aspect-[4/5] overflow-hidden shadow-2xl flex flex-col items-center justify-between text-center bg-gradient-to-br ${selectedGradient.gradient}`}
+                style={{ borderRadius: '24px' }}
             >
-                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay pointer-events-none"></div>
+                {/* Decorative Pattern Overlay */}
+                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 mix-blend-overlay pointer-events-none"></div>
 
-                <div className="relative z-10 w-full h-full flex flex-col items-center justify-center border-[3px] border-white/30 rounded-2xl p-4 bg-white/10 backdrop-blur-sm">
-                    {userImage ? (
-                        <div className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-white shadow-lg overflow-hidden mb-4">
-                            <img src={userImage} alt="Profile" className="w-full h-full object-cover" />
-                        </div>
-                    ) : (
-                        <div className="text-6xl mb-4 animate-bounce">🎂</div>
-                    )}
-
-                    <h2 className={`text-4xl md:text-5xl ${selectedGradient.textColor} mb-2 drop-shadow-lg ${fontClassMap[selectedFont]}`}>
-                        {name || (lang === 'en' ? 'Happy Birthday' : 'শুভ জন্মদিন')}
-                    </h2>
-                    
-                    <div className="bg-white/20 px-4 py-1 rounded-full mb-4 backdrop-blur-md">
-                         <p className={`text-lg md:text-xl font-bold text-white ${fontClassMap.fun}`}>
-                            {age.years} {t.years} Young!
+                {/* Top Decoration */}
+                <div className="w-full p-6 pt-8 z-10 flex flex-col items-center">
+                    <div className="bg-white/20 backdrop-blur-md px-4 py-1 rounded-full border border-white/30 shadow-lg mb-4">
+                         <p className="text-xs font-bold text-white tracking-widest uppercase">
+                            {lang === 'en' ? 'Special Day' : 'শুভ দিন'}
                          </p>
                     </div>
-
-                    <p className={`text-white/90 text-sm md:text-lg italic max-w-[80%] leading-relaxed ${fontClassMap.sans}`}>
-                        "{statusText}"
-                    </p>
-
-                    <div className="absolute bottom-4 right-4 opacity-60">
-                        <p className="text-[10px] text-white uppercase tracking-widest">AgeClock App</p>
-                    </div>
                     
-                    <div className="absolute top-4 left-4 text-2xl animate-pulse">🎉</div>
-                    <div className="absolute bottom-10 left-8 text-xl animate-spin-slow">🎈</div>
-                    <div className="absolute top-10 right-8 text-xl animate-bounce">✨</div>
+                    <h2 className={`text-4xl md:text-5xl ${selectedGradient.textColor} drop-shadow-[0_4px_4px_rgba(0,0,0,0.3)] leading-tight ${fontClassMap[selectedFont]}`}>
+                         {lang === 'en' ? 'Happy Birthday' : 'শুভ জন্মদিন'}
+                    </h2>
+                    <h3 className={`text-2xl md:text-3xl font-bold text-white mt-2 drop-shadow-md ${fontClassMap.fun}`}>
+                        {name}
+                    </h3>
                 </div>
+
+                {/* Photo Area with Glow */}
+                <div className="relative z-10 group">
+                    <div className="absolute inset-0 bg-white/30 rounded-full blur-xl animate-pulse"></div>
+                    <div className="relative w-40 h-40 rounded-full border-[6px] border-white/90 shadow-2xl overflow-hidden bg-white/10 flex items-center justify-center transform group-hover:scale-105 transition-transform duration-500">
+                        {userImage ? (
+                            <img src={userImage} alt="Profile" className="w-full h-full object-cover" />
+                        ) : (
+                            <Gift size={64} className="text-white/80" />
+                        )}
+                    </div>
+                    {/* Floating Age Badge */}
+                    <div className="absolute -bottom-2 -right-2 bg-yellow-400 text-yellow-900 w-14 h-14 rounded-full flex items-center justify-center border-4 border-white shadow-lg animate-bounce">
+                        <span className="font-bold text-lg">{age.years}</span>
+                    </div>
+                </div>
+
+                {/* Bottom Message */}
+                <div className="w-full p-6 pb-8 z-10">
+                    <div className="bg-black/10 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+                         <p className={`text-white/95 text-sm md:text-base italic leading-relaxed ${fontClassMap.sans}`}>
+                            "{statusText}"
+                        </p>
+                    </div>
+                    <div className="mt-4 opacity-70">
+                        <p className="text-[10px] text-white uppercase tracking-[0.2em] font-bold">Generated by AgeClock</p>
+                    </div>
+                </div>
+
+                {/* Floating SVG Decorations */}
+                <div className="absolute top-10 left-4 opacity-80 animate-float">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="white" fillOpacity="0.4"/></svg>
+                </div>
+                <div className="absolute bottom-20 right-4 opacity-60 animate-float" style={{ animationDelay: '2s' }}>
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" fill="white" fillOpacity="0.3"/></svg>
+                </div>
+                <div className="absolute top-1/2 left-2 opacity-50 animate-float" style={{ animationDelay: '1s' }}>
+                     <span className="text-2xl">🎉</span>
+                </div>
+                <div className="absolute top-1/2 right-2 opacity-50 animate-float" style={{ animationDelay: '3s' }}>
+                     <span className="text-2xl">🎈</span>
+                </div>
+
             </motion.div>
         </div>
 
         {/* Customization Controls */}
-        <div className="glass-card rounded-3xl p-6 space-y-6">
+        <div className="glass-card rounded-3xl p-6 space-y-6 h-fit">
             <h4 className="text-gray-800 dark:text-white font-semibold flex items-center gap-2">
                 <Palette size={18} className="text-blue-500 dark:text-blue-400" /> {t.customizeCard}
             </h4>
