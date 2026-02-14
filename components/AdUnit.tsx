@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ExternalLink, AlertTriangle, Download } from 'lucide-react';
+import { X, ExternalLink, Download } from 'lucide-react';
 import { GlassButton } from './ui/GlassButton';
 
 // Configuration for Ad Keys provided by user
@@ -20,12 +20,18 @@ const AD_KEYS = {
 
 // Helper component to render script-based ads safely inside an iframe
 const AdsterraAd = ({ width, height, adKey }: { width: number; height: number; adKey: string }) => {
+  // We use a robust HTML structure for the srcDoc to ensure the script executes in a clean environment
+  // We add sandbox attributes to allow scripts and popups which are required for ads
   const srcDoc = `
+    <!DOCTYPE html>
     <html>
       <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <base target="_blank" />
         <style>
-          body { margin: 0; padding: 0; overflow: hidden; display: flex; justify-content: center; align-items: center; background: transparent; }
+          html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: transparent; }
+          body { display: flex; justify-content: center; align-items: center; }
         </style>
       </head>
       <body>
@@ -45,12 +51,14 @@ const AdsterraAd = ({ width, height, adKey }: { width: number; height: number; a
 
   return (
     <iframe
+      key={adKey} // Force re-render if key changes
       title={`ad-${adKey}`}
       width={width}
       height={height}
       srcDoc={srcDoc}
-      style={{ border: 'none', overflow: 'hidden' }}
+      style={{ border: 'none', display: 'block' }}
       scrolling="no"
+      sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-presentation"
     />
   );
 };
@@ -64,15 +72,17 @@ interface AdBannerProps {
 export const AdBanner: React.FC<AdBannerProps> = ({ slot, className }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  if (!isVisible) return null;
+  if (!isVisible || !mounted) return null;
 
   let adContent = null;
   let containerHeight = 'h-auto';
@@ -104,18 +114,19 @@ export const AdBanner: React.FC<AdBannerProps> = ({ slot, className }) => {
 
   return (
     <div className={`relative flex items-center justify-center bg-transparent ${containerHeight} ${className}`}>
-      {/* Close button for sticky footer only, or general if desired */}
+      {/* Close button for sticky footer only */}
       {slot === 'sticky-footer' && (
         <button 
           onClick={() => setIsVisible(false)}
-          className="absolute -top-3 right-0 bg-red-500 text-white p-1 rounded-full shadow-md z-50"
+          className="absolute -top-4 right-0 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full shadow-md z-50 transition-colors"
+          aria-label="Close Ad"
         >
-          <X size={12} />
+          <X size={14} />
         </button>
       )}
 
       {/* Ad Content */}
-      <div className="overflow-hidden rounded-md shadow-sm flex justify-center">
+      <div className="overflow-hidden rounded-md shadow-sm flex justify-center bg-transparent">
         {adContent}
       </div>
     </div>
@@ -187,39 +198,4 @@ export const AdPopup = () => {
       </motion.div>
     </AnimatePresence>
   );
-};
-
-export const MoreAppsButton: React.FC<{lang: string}> = ({ lang }) => {
-    const [showConfirm, setShowConfirm] = useState(false);
-
-    const handleRedirect = () => {
-        // Use the same link or a different app store link
-        window.open('https://play.google.com/store/apps', '_blank');
-        setShowConfirm(false);
-    };
-
-    return (
-        <>
-            <button 
-                onClick={() => setShowConfirm(true)}
-                className="mt-8 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white underline decoration-dotted underline-offset-4 transition-colors"
-            >
-                {lang === 'en' ? 'More Apps by Us' : 'আমাদের আরও অ্যাপস'}
-            </button>
-
-            {showConfirm && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-                    <div className="bg-[#1a1a2e] border border-white/10 p-6 rounded-2xl max-w-xs w-full text-center">
-                        <AlertTriangle className="mx-auto text-yellow-500 mb-3" size={32} />
-                        <h4 className="text-white font-bold mb-2">Leaving App?</h4>
-                        <p className="text-gray-400 text-sm mb-4">You are about to visit the external App Store.</p>
-                        <div className="flex gap-2">
-                            <GlassButton variant="secondary" onClick={() => setShowConfirm(false)} className="flex-1 text-sm py-2">Cancel</GlassButton>
-                            <GlassButton onClick={handleRedirect} className="flex-1 text-sm py-2 bg-blue-600">Go</GlassButton>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </>
-    );
 };

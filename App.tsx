@@ -4,7 +4,7 @@ import confetti from 'canvas-confetti';
 import html2canvas from 'html2canvas';
 import { 
   Calendar, User, Calculator, Moon, Sun, Globe, 
-  Clock, Hourglass, Star, Gift, Share, Heart 
+  Clock, Hourglass, Star, Gift, Share, Heart, RotateCcw 
 } from 'lucide-react';
 import { calculateAgeLogic } from './utils/logic';
 import { TRANSLATIONS } from './utils/data';
@@ -13,11 +13,8 @@ import { GlassButton } from './components/ui/GlassButton';
 import { ResultCard } from './components/ResultCard';
 import { StatusGenerator } from './components/StatusGenerator';
 import { BirthdayCardGenerator } from './components/BirthdayCardGenerator';
-import { AdBanner, AdPopup, MoreAppsButton } from './components/AdUnit';
+import { AdBanner, AdPopup } from './components/AdUnit';
 import { CookieConsent, LegalFooter } from './components/Legal';
-
-// Flower Emojis for the falling animation
-const FLOWERS = ['🌸', '🌺', '🌻', '🌹', '🌷', '💐', '🌼', '🏵️'];
 
 function App() {
   // State
@@ -28,7 +25,6 @@ function App() {
   const [theme, setTheme] = useState<ThemeMode>('dark');
   const [loading, setLoading] = useState(false);
   const [generatedStatus, setGeneratedStatus] = useState('');
-  const [showFlowers, setShowFlowers] = useState(false); // State for flower animation
   const resultRef = useRef<HTMLDivElement>(null);
 
   // Load Persisted Data
@@ -62,7 +58,6 @@ function App() {
     if (!dob) return;
     setLoading(true);
     setResult(null);
-    setShowFlowers(false); // Reset flowers
 
     // Track usage
     const count = parseInt(sessionStorage.getItem('calculateCount') || '0');
@@ -75,7 +70,6 @@ function App() {
         
         if (res.isBirthday) {
           fireConfetti();
-          triggerFlowers(); // Trigger the falling flowers
         }
       } catch (e) {
         console.error(e);
@@ -84,10 +78,10 @@ function App() {
     }, 800);
   };
 
-  const triggerFlowers = () => {
-    setShowFlowers(true);
-    // Stop flowers after 8 seconds
-    setTimeout(() => setShowFlowers(false), 8000);
+  const handleReset = () => {
+    setResult(null);
+    setDob('');
+    setName('');
   };
 
   const fireConfetti = () => {
@@ -141,28 +135,6 @@ function App() {
         )}
       </div>
 
-      {/* Flower Animation Container */}
-      <AnimatePresence>
-        {showFlowers && (
-          <div className="flower-container">
-            {Array.from({ length: 30 }).map((_, i) => (
-              <div 
-                key={i} 
-                className="flower"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  animationDuration: `${Math.random() * 3 + 4}s`,
-                  animationDelay: `${Math.random() * 5}s`,
-                  opacity: Math.random() * 0.5 + 0.5
-                }}
-              >
-                {FLOWERS[Math.floor(Math.random() * FLOWERS.length)]}
-              </div>
-            ))}
-          </div>
-        )}
-      </AnimatePresence>
-
       <div className={`relative z-10 max-w-4xl mx-auto p-3 sm:p-4 md:p-8 ${lang === 'bn' ? 'font-bangla' : 'font-sans'}`}>
         
         {/* Header Section */}
@@ -191,61 +163,63 @@ function App() {
           </div>
         </header>
 
-        {/* Input Section */}
-        <motion.div 
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          className="glass-card rounded-3xl p-5 md:p-8 mb-6 md:mb-8 relative overflow-hidden"
-        >
-          {/* Decorative Gradient Line */}
-          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#00C6FF] to-[#E100FF]" />
+        {/* Input Section - Hidden when result is shown */}
+        {!result && (
+            <motion.div 
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="glass-card rounded-3xl p-5 md:p-8 mb-6 md:mb-8 relative overflow-hidden"
+            >
+            {/* Decorative Gradient Line */}
+            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#00C6FF] to-[#E100FF]" />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-            <div className="space-y-2">
-               <label className={`text-sm font-medium ml-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                 {lang === 'en' ? 'Name (Optional)' : 'নাম (ঐচ্ছিক)'}
-               </label>
-               <div className="relative">
-                 <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400" size={18} />
-                 <input 
-                    type="text" 
-                    placeholder={t.namePlaceholder}
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 md:py-4 rounded-xl glass-input text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-purple-500 transition-all text-sm md:text-base"
-                 />
-               </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                <div className="space-y-2">
+                <label className={`text-sm font-medium ml-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                    {lang === 'en' ? 'Name (Optional)' : 'নাম (ঐচ্ছিক)'}
+                </label>
+                <div className="relative">
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400" size={18} />
+                    <input 
+                        type="text" 
+                        placeholder={t.namePlaceholder}
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="w-full pl-12 pr-4 py-3 md:py-4 rounded-xl glass-input text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-purple-500 transition-all text-sm md:text-base"
+                    />
+                </div>
+                </div>
+
+                <div className="space-y-2">
+                <label className={`text-sm font-medium ml-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                    {t.dobLabel}
+                </label>
+                <div className="relative">
+                    <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400" size={18} />
+                    <input 
+                        type="date" 
+                        value={dob}
+                        onChange={(e) => setDob(e.target.value)}
+                        className="w-full pl-12 pr-4 py-3 md:py-4 rounded-xl glass-input text-gray-800 dark:text-gray-400 focus:ring-2 focus:ring-purple-500 transition-all [color-scheme:light] dark:[color-scheme:dark] text-sm md:text-base"
+                    />
+                </div>
+                </div>
             </div>
 
-            <div className="space-y-2">
-               <label className={`text-sm font-medium ml-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                 {t.dobLabel}
-               </label>
-               <div className="relative">
-                 <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400" size={18} />
-                 <input 
-                    type="date" 
-                    value={dob}
-                    onChange={(e) => setDob(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 md:py-4 rounded-xl glass-input text-gray-800 dark:text-gray-400 focus:ring-2 focus:ring-purple-500 transition-all [color-scheme:light] dark:[color-scheme:dark] text-sm md:text-base"
-                 />
-               </div>
+            <div className="mt-6 md:mt-8">
+                <GlassButton 
+                onClick={handleCalculate} 
+                className="w-full py-3 md:py-4 text-base md:text-lg bg-gradient-to-r from-[#7F00FF] to-[#E100FF] text-white hover:opacity-90 border-none shadow-purple-500/30"
+                >
+                {loading ? (
+                    <span className="animate-pulse">Calculating...</span>
+                ) : (
+                    t.calculateBtn
+                )}
+                </GlassButton>
             </div>
-          </div>
-
-          <div className="mt-6 md:mt-8">
-             <GlassButton 
-               onClick={handleCalculate} 
-               className="w-full py-3 md:py-4 text-base md:text-lg bg-gradient-to-r from-[#7F00FF] to-[#E100FF] text-white hover:opacity-90 border-none shadow-purple-500/30"
-             >
-               {loading ? (
-                 <span className="animate-pulse">Calculating...</span>
-               ) : (
-                 t.calculateBtn
-               )}
-             </GlassButton>
-          </div>
-        </motion.div>
+            </motion.div>
+        )}
 
         {/* Ad Space - Top Banner */}
         <div className="mb-6 md:mb-8">
@@ -263,13 +237,22 @@ function App() {
                className="space-y-6 md:space-y-8"
             >
               {/* Greeting */}
-              <div className="text-center space-y-2">
+              <div className="text-center space-y-2 relative">
                 <h2 className={`text-2xl md:text-3xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
                   {result.isBirthday ? `🎉 ${t.happyBirthday}` : `${t.greeting}, ${name || (lang === 'en' ? 'Friend' : 'বন্ধু')}!`}
                 </h2>
                 {result.isBirthday && (
                    <p className="text-pink-500 dark:text-pink-400 font-medium animate-bounce">{lang === 'en' ? "It's your special day!" : "আজ তোমার বিশেষ দিন!"}</p>
                 )}
+                
+                {/* Reset Button */}
+                <button 
+                  onClick={handleReset}
+                  className="absolute right-0 top-0 p-2 rounded-full bg-white/10 hover:bg-white/20 text-gray-600 dark:text-gray-300 transition-colors"
+                  title="Calculate Again"
+                >
+                  <RotateCcw size={20} />
+                </button>
               </div>
 
               {/* Main Age Cards - Responsive Grid */}
@@ -361,7 +344,10 @@ function App() {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex justify-center mt-6">
+              <div className="flex justify-center mt-6 gap-4">
+                 <GlassButton variant="secondary" onClick={handleReset} icon={<RotateCcw size={18} />}>
+                   {lang === 'en' ? 'Calculate Again' : 'আবার হিসাব করুন'}
+                 </GlassButton>
                  <GlassButton variant="secondary" onClick={handleScreenshot} icon={<Share size={18} />}>
                    {lang === 'en' ? 'Share Stats' : 'শেয়ার করুন'}
                  </GlassButton>
@@ -398,10 +384,6 @@ function App() {
             <p className="text-sm md:text-base text-gray-500 dark:text-gray-400">{lang === 'en' ? 'Enter your details to begin' : 'শুরু করতে আপনার তথ্য দিন'}</p>
           </div>
         )}
-
-        <div className="flex flex-col items-center pb-32">
-           <MoreAppsButton lang={lang} />
-        </div>
 
         {/* Sticky Bottom Ad - Visible on Mobile */}
         <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/90 dark:bg-[#0f0f1a]/90 backdrop-blur-md border-t border-gray-200 dark:border-white/10 p-2 block">
