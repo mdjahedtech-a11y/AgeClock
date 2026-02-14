@@ -3,33 +3,121 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, ExternalLink, AlertTriangle, Download } from 'lucide-react';
 import { GlassButton } from './ui/GlassButton';
 
+// Configuration for Ad Keys provided by user
+const AD_KEYS = {
+  // Mobile 320x50 (Top Banner Mobile & Sticky Footer)
+  MOBILE_BANNER: 'dd82580ca3811525f598111a4997ec11',
+  
+  // Desktop 728x90 (Top Banner Desktop & Mid Content Desktop)
+  DESKTOP_LEADERBOARD: 'b38bd17e3c239bba5d47b65b45ec3cb4',
+  
+  // Mobile 300x250 (Mid Content Mobile)
+  MOBILE_RECTANGLE: '9d925f5de7f3b15ff6c1536c558c29d9',
+  
+  // Popup Link
+  POPUP_LINK: 'https://www.effectivegatecpm.com/mcadnt9pk?key=706246ed54a77c8e386bc6883d56608a'
+};
+
+// Helper component to render script-based ads safely inside an iframe
+const AdsterraAd = ({ width, height, adKey }: { width: number; height: number; adKey: string }) => {
+  const srcDoc = `
+    <html>
+      <head>
+        <base target="_blank" />
+        <style>
+          body { margin: 0; padding: 0; overflow: hidden; display: flex; justify-content: center; align-items: center; background: transparent; }
+        </style>
+      </head>
+      <body>
+        <script type="text/javascript">
+          atOptions = {
+            'key' : '${adKey}',
+            'format' : 'iframe',
+            'height' : ${height},
+            'width' : ${width},
+            'params' : {}
+          };
+        </script>
+        <script type="text/javascript" src="https://www.highperformanceformat.com/${adKey}/invoke.js"></script>
+      </body>
+    </html>
+  `;
+
+  return (
+    <iframe
+      title={`ad-${adKey}`}
+      width={width}
+      height={height}
+      srcDoc={srcDoc}
+      style={{ border: 'none', overflow: 'hidden' }}
+      scrolling="no"
+    />
+  );
+};
+
 interface AdBannerProps {
   slot: string;
   className?: string;
   format?: 'banner' | 'rectangle';
 }
 
-export const AdBanner: React.FC<AdBannerProps> = ({ slot, className, format = 'banner' }) => {
+export const AdBanner: React.FC<AdBannerProps> = ({ slot, className }) => {
   const [isVisible, setIsVisible] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   if (!isVisible) return null;
 
-  return (
-    <div className={`relative overflow-hidden glass-card rounded-xl border border-white/10 dark:border-white/10 flex flex-col items-center justify-center bg-white/40 dark:bg-black/20 ${format === 'banner' ? 'h-[60px] md:h-[90px]' : 'h-[250px]'} ${className}`}>
-      <span className="text-[10px] text-gray-500 absolute top-1 right-2 border border-gray-400 dark:border-gray-600 px-1 rounded">AD</span>
-      
-      {/* Placeholder for Ad Network Code (AdSense/AdMob/Unity) */}
-      <div className="text-center opacity-50">
-        <p className="text-xs text-gray-600 dark:text-gray-400">Sponsored Advertisement</p>
-        <p className="text-[10px] text-gray-500 dark:text-gray-600 mt-1">Slot: {slot}</p>
-      </div>
+  let adContent = null;
+  let containerHeight = 'h-auto';
 
-      <button 
-        onClick={() => setIsVisible(false)}
-        className="absolute top-1 left-1 p-1 hover:bg-black/5 dark:hover:bg-white/10 rounded-full text-gray-500"
-      >
-        <X size={10} />
-      </button>
+  // Determine which ad to show based on slot and device
+  if (slot === 'top-banner') {
+    // Mobile: 320x50, Desktop: 728x90
+    if (isMobile) {
+      adContent = <AdsterraAd width={320} height={50} adKey={AD_KEYS.MOBILE_BANNER} />;
+      containerHeight = 'h-[60px]';
+    } else {
+      adContent = <AdsterraAd width={728} height={90} adKey={AD_KEYS.DESKTOP_LEADERBOARD} />;
+      containerHeight = 'h-[100px]';
+    }
+  } else if (slot === 'mid-content') {
+    // Mobile: 300x250, Desktop: 728x90
+    if (isMobile) {
+      adContent = <AdsterraAd width={300} height={250} adKey={AD_KEYS.MOBILE_RECTANGLE} />;
+      containerHeight = 'h-[260px]';
+    } else {
+      adContent = <AdsterraAd width={728} height={90} adKey={AD_KEYS.DESKTOP_LEADERBOARD} />;
+      containerHeight = 'h-[100px]';
+    }
+  } else if (slot === 'sticky-footer') {
+    // Always 320x50 (Standard for sticky footer)
+    adContent = <AdsterraAd width={320} height={50} adKey={AD_KEYS.MOBILE_BANNER} />;
+    containerHeight = 'h-[50px]';
+  }
+
+  return (
+    <div className={`relative flex items-center justify-center bg-transparent ${containerHeight} ${className}`}>
+      {/* Close button for sticky footer only, or general if desired */}
+      {slot === 'sticky-footer' && (
+        <button 
+          onClick={() => setIsVisible(false)}
+          className="absolute -top-3 right-0 bg-red-500 text-white p-1 rounded-full shadow-md z-50"
+        >
+          <X size={12} />
+        </button>
+      )}
+
+      {/* Ad Content */}
+      <div className="overflow-hidden rounded-md shadow-sm flex justify-center">
+        {adContent}
+      </div>
     </div>
   );
 };
@@ -48,8 +136,8 @@ export const AdPopup = () => {
   }, []);
 
   const handleAdClick = () => {
-      // 1. Open Ad Link
-      window.open('https://play.google.com/store/apps', '_blank');
+      // 1. Open Ad Link provided by user
+      window.open(AD_KEYS.POPUP_LINK, '_blank');
       
       // 2. Dispatch event to unlock download
       window.dispatchEvent(new Event('ad-verified'));
@@ -66,7 +154,7 @@ export const AdPopup = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+        className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md"
       >
         <motion.div 
           initial={{ scale: 0.9, opacity: 0 }}
@@ -84,7 +172,7 @@ export const AdPopup = () => {
              </div>
              <h3 className="text-xl font-bold text-white mb-2">Download Ready!</h3>
              <p className="text-gray-400 text-sm mb-6">
-                 Please visit our sponsor to unlock your high-quality birthday card download instantly.
+                 Click the button below to visit our partner and start your high-quality download immediately.
              </p>
              
              <GlassButton className="w-full justify-center bg-blue-600 hover:bg-blue-500 group" onClick={handleAdClick}>
@@ -105,7 +193,7 @@ export const MoreAppsButton: React.FC<{lang: string}> = ({ lang }) => {
     const [showConfirm, setShowConfirm] = useState(false);
 
     const handleRedirect = () => {
-        // Redirect logic here
+        // Use the same link or a different app store link
         window.open('https://play.google.com/store/apps', '_blank');
         setShowConfirm(false);
     };
