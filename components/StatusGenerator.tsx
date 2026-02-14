@@ -37,8 +37,8 @@ export const StatusGenerator: React.FC<StatusGeneratorProps> = ({ lang }) => {
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500" />
 
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-bold text-white flex items-center gap-2">
-            <Sparkles className="text-yellow-300" />
+          <h3 className="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
+            <Sparkles className="text-yellow-500 dark:text-yellow-300" />
             {TRANSLATIONS[lang].generateStatus}
           </h3>
         </div>
@@ -49,9 +49,9 @@ export const StatusGenerator: React.FC<StatusGeneratorProps> = ({ lang }) => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
-            className="bg-white/5 border border-white/10 rounded-xl p-6 mb-6 min-h-[100px] flex items-center justify-center text-center"
+            className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl p-6 mb-6 min-h-[100px] flex items-center justify-center text-center"
           >
-            <p className="text-lg md:text-xl text-white font-medium leading-relaxed">
+            <p className="text-lg md:text-xl text-gray-800 dark:text-white font-medium leading-relaxed">
               "{currentQuote.text}"
             </p>
           </motion.div>

@@ -156,10 +156,10 @@ function App() {
           </div>
 
           <div className="flex gap-3">
-            <button onClick={toggleLang} className="p-3 rounded-xl glass-card text-white hover:bg-white/20 transition-all active:scale-95">
+            <button onClick={toggleLang} className="p-3 rounded-xl glass-card text-gray-800 dark:text-white hover:bg-white/40 dark:hover:bg-white/20 transition-all active:scale-95">
               <span className="font-bold">{lang === 'en' ? 'EN' : 'BN'}</span>
             </button>
-            <button onClick={toggleTheme} className="p-3 rounded-xl glass-card text-white hover:bg-white/20 transition-all active:scale-95">
+            <button onClick={toggleTheme} className="p-3 rounded-xl glass-card text-gray-800 dark:text-white hover:bg-white/40 dark:hover:bg-white/20 transition-all active:scale-95">
               {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
             </button>
           </div>
@@ -180,13 +180,13 @@ function App() {
                  {lang === 'en' ? 'Name (Optional)' : 'নাম (ঐচ্ছিক)'}
                </label>
                <div className="relative">
-                 <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                 <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400" size={18} />
                  <input 
                     type="text" 
                     placeholder={t.namePlaceholder}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full pl-12 pr-4 py-4 rounded-xl glass-input placeholder-gray-400 focus:ring-2 focus:ring-purple-500 transition-all"
+                    className="w-full pl-12 pr-4 py-4 rounded-xl glass-input text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-purple-500 transition-all"
                  />
                </div>
             </div>
@@ -196,12 +196,12 @@ function App() {
                  {t.dobLabel}
                </label>
                <div className="relative">
-                 <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                 <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400" size={18} />
                  <input 
                     type="date" 
                     value={dob}
                     onChange={(e) => setDob(e.target.value)}
-                    className="w-full pl-12 pr-4 py-4 rounded-xl glass-input text-gray-400 focus:ring-2 focus:ring-purple-500 transition-all [color-scheme:dark]"
+                    className="w-full pl-12 pr-4 py-4 rounded-xl glass-input text-gray-800 dark:text-gray-400 focus:ring-2 focus:ring-purple-500 transition-all [color-scheme:light] dark:[color-scheme:dark]"
                  />
                </div>
             </div>
@@ -210,7 +210,7 @@ function App() {
           <div className="mt-8">
              <GlassButton 
                onClick={handleCalculate} 
-               className="w-full py-4 text-lg bg-gradient-to-r from-[#7F00FF] to-[#E100FF] hover:opacity-90 border-none shadow-purple-500/30"
+               className="w-full py-4 text-lg bg-gradient-to-r from-[#7F00FF] to-[#E100FF] text-white hover:opacity-90 border-none shadow-purple-500/30"
              >
                {loading ? (
                  <span className="animate-pulse">Calculating...</span>
@@ -242,7 +242,7 @@ function App() {
                   {result.isBirthday ? `🎉 ${t.happyBirthday}` : `${t.greeting}, ${name || (lang === 'en' ? 'Friend' : 'বন্ধু')}!`}
                 </h2>
                 {result.isBirthday && (
-                   <p className="text-pink-400 font-medium animate-bounce">{lang === 'en' ? "It's your special day!" : "আজ তোমার বিশেষ দিন!"}</p>
+                   <p className="text-pink-500 dark:text-pink-400 font-medium animate-bounce">{lang === 'en' ? "It's your special day!" : "আজ তোমার বিশেষ দিন!"}</p>
                 )}
               </div>
 
@@ -273,63 +273,63 @@ function App() {
 
               {/* Secondary Details */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                 <div className="glass-card p-4 rounded-2xl flex items-center gap-4 hover:bg-white/10 transition-colors">
-                    <div className="p-3 bg-indigo-500/20 text-indigo-400 rounded-full">
+                 <div className="glass-card p-4 rounded-2xl flex items-center gap-4 hover:bg-white/40 dark:hover:bg-white/10 transition-colors">
+                    <div className="p-3 bg-indigo-500/20 text-indigo-500 dark:text-indigo-400 rounded-full">
                       <Star size={20} />
                     </div>
                     <div>
-                      <p className="text-xs text-gray-400 uppercase font-bold">{t.zodiac}</p>
-                      <p className="text-lg font-semibold text-white">{result.zodiac}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold">{t.zodiac}</p>
+                      <p className="text-lg font-semibold text-gray-800 dark:text-white">{result.zodiac}</p>
                     </div>
                  </div>
 
-                 <div className="glass-card p-4 rounded-2xl flex items-center gap-4 hover:bg-white/10 transition-colors">
-                    <div className="p-3 bg-green-500/20 text-green-400 rounded-full">
+                 <div className="glass-card p-4 rounded-2xl flex items-center gap-4 hover:bg-white/40 dark:hover:bg-white/10 transition-colors">
+                    <div className="p-3 bg-green-500/20 text-green-600 dark:text-green-400 rounded-full">
                       <Globe size={20} />
                     </div>
                     <div>
-                      <p className="text-xs text-gray-400 uppercase font-bold">{t.totalDays}</p>
-                      <p className="text-lg font-semibold text-white">{result.totalDays.toLocaleString()}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold">{t.totalDays}</p>
+                      <p className="text-lg font-semibold text-gray-800 dark:text-white">{result.totalDays.toLocaleString()}</p>
                     </div>
                  </div>
 
-                 <div className="glass-card p-4 rounded-2xl flex items-center gap-4 hover:bg-white/10 transition-colors">
-                    <div className="p-3 bg-yellow-500/20 text-yellow-400 rounded-full">
+                 <div className="glass-card p-4 rounded-2xl flex items-center gap-4 hover:bg-white/40 dark:hover:bg-white/10 transition-colors">
+                    <div className="p-3 bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 rounded-full">
                       <Gift size={20} />
                     </div>
                     <div>
-                      <p className="text-xs text-gray-400 uppercase font-bold">{t.nextBirthday}</p>
-                      <p className="text-lg font-semibold text-white">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold">{t.nextBirthday}</p>
+                      <p className="text-lg font-semibold text-gray-800 dark:text-white">
                         {result.nextBirthdayDays === 0 ? (lang === 'en' ? 'Today!' : 'আজ!') : `${result.nextBirthdayDays} ${t.days}`}
                       </p>
                     </div>
                  </div>
 
-                 <div className="glass-card p-4 rounded-2xl flex items-center gap-4 hover:bg-white/10 transition-colors">
-                    <div className="p-3 bg-red-500/20 text-red-400 rounded-full">
+                 <div className="glass-card p-4 rounded-2xl flex items-center gap-4 hover:bg-white/40 dark:hover:bg-white/10 transition-colors">
+                    <div className="p-3 bg-red-500/20 text-red-500 dark:text-red-400 rounded-full">
                       <Heart size={20} />
                     </div>
                     <div>
-                      <p className="text-xs text-gray-400 uppercase font-bold">{t.birthDayName}</p>
-                      <p className="text-lg font-semibold text-white">{result.birthDayName}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold">{t.birthDayName}</p>
+                      <p className="text-lg font-semibold text-gray-800 dark:text-white">{result.birthDayName}</p>
                     </div>
                  </div>
               </div>
               
               {/* Extra Stats - Calculated on the fly for display */}
               <div className="glass-card rounded-2xl p-4 overflow-x-auto">
-                 <div className="flex justify-between min-w-[300px] divide-x divide-white/10 text-center">
+                 <div className="flex justify-between min-w-[300px] divide-x divide-gray-300 dark:divide-white/10 text-center">
                     <div className="px-4 flex-1">
-                       <p className="text-xs text-gray-400 uppercase">{t.weeks}</p>
-                       <p className="text-sm font-bold text-white">{(Math.floor(result.totalDays / 7)).toLocaleString()}</p>
+                       <p className="text-xs text-gray-500 dark:text-gray-400 uppercase">{t.weeks}</p>
+                       <p className="text-sm font-bold text-gray-800 dark:text-white">{(Math.floor(result.totalDays / 7)).toLocaleString()}</p>
                     </div>
                     <div className="px-4 flex-1">
-                       <p className="text-xs text-gray-400 uppercase">{t.hours}</p>
-                       <p className="text-sm font-bold text-white">{(result.totalDays * 24).toLocaleString()}</p>
+                       <p className="text-xs text-gray-500 dark:text-gray-400 uppercase">{t.hours}</p>
+                       <p className="text-sm font-bold text-gray-800 dark:text-white">{(result.totalDays * 24).toLocaleString()}</p>
                     </div>
                     <div className="px-4 flex-1">
-                       <p className="text-xs text-gray-400 uppercase">{t.minutes}</p>
-                       <p className="text-sm font-bold text-white">{(result.totalDays * 24 * 60).toLocaleString()}</p>
+                       <p className="text-xs text-gray-500 dark:text-gray-400 uppercase">{t.minutes}</p>
+                       <p className="text-sm font-bold text-gray-800 dark:text-white">{(result.totalDays * 24 * 60).toLocaleString()}</p>
                     </div>
                  </div>
               </div>
@@ -358,10 +358,10 @@ function App() {
 
         {!result && !loading && (
           <div className="text-center mt-20 opacity-50">
-            <div className="inline-block p-6 rounded-full bg-white/5 mb-4 animate-pulse">
-               <Calculator size={48} className="text-white" />
+            <div className="inline-block p-6 rounded-full bg-white/40 dark:bg-white/5 mb-4 animate-pulse">
+               <Calculator size={48} className="text-gray-400 dark:text-white" />
             </div>
-            <p className="text-gray-400">{lang === 'en' ? 'Enter your details to begin' : 'শুরু করতে আপনার তথ্য দিন'}</p>
+            <p className="text-gray-500 dark:text-gray-400">{lang === 'en' ? 'Enter your details to begin' : 'শুরু করতে আপনার তথ্য দিন'}</p>
           </div>
         )}
 
@@ -370,7 +370,7 @@ function App() {
         </div>
 
         {/* Sticky Bottom Ad */}
-        <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#0f0f1a]/90 backdrop-blur-md border-t border-white/10 p-2 hidden md:block">
+        <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/90 dark:bg-[#0f0f1a]/90 backdrop-blur-md border-t border-gray-200 dark:border-white/10 p-2 hidden md:block">
             <AdBanner slot="sticky-footer" className="max-w-4xl mx-auto !h-[60px]" />
         </div>
         

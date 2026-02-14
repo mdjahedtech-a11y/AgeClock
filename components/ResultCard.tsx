@@ -16,7 +16,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({ label, value, icon: Icon
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay }}
-      className={`glass-card p-4 rounded-2xl flex flex-col items-center justify-center text-center relative overflow-hidden group hover:bg-white/20 transition-all`}
+      className={`glass-card p-4 rounded-2xl flex flex-col items-center justify-center text-center relative overflow-hidden group hover:bg-white/40 dark:hover:bg-white/20 transition-all`}
     >
       {/* Glow Effect */}
       <div className={`absolute -top-10 -right-10 w-24 h-24 ${colorClass} opacity-30 blur-2xl rounded-full group-hover:opacity-50 transition-opacity duration-500`} />
@@ -25,10 +25,10 @@ export const ResultCard: React.FC<ResultCardProps> = ({ label, value, icon: Icon
         <Icon size={24} />
       </div>
       
-      <h3 className="text-2xl sm:text-3xl font-bold text-white mb-1 tracking-tight drop-shadow-sm">
+      <h3 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white mb-1 tracking-tight drop-shadow-sm">
         {value}
       </h3>
-      <p className="text-white/70 text-sm font-medium uppercase tracking-wider">{label}</p>
+      <p className="text-gray-600 dark:text-white/70 text-sm font-medium uppercase tracking-wider">{label}</p>
     </motion.div>
   );
 };

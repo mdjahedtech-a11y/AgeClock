@@ -15,18 +15,18 @@ export const AdBanner: React.FC<AdBannerProps> = ({ slot, className, format = 'b
   if (!isVisible) return null;
 
   return (
-    <div className={`relative overflow-hidden glass-card rounded-xl border border-white/10 flex flex-col items-center justify-center bg-black/20 ${format === 'banner' ? 'h-[60px] md:h-[90px]' : 'h-[250px]'} ${className}`}>
-      <span className="text-[10px] text-gray-500 absolute top-1 right-2 border border-gray-600 px-1 rounded">AD</span>
+    <div className={`relative overflow-hidden glass-card rounded-xl border border-white/10 dark:border-white/10 flex flex-col items-center justify-center bg-white/40 dark:bg-black/20 ${format === 'banner' ? 'h-[60px] md:h-[90px]' : 'h-[250px]'} ${className}`}>
+      <span className="text-[10px] text-gray-500 absolute top-1 right-2 border border-gray-400 dark:border-gray-600 px-1 rounded">AD</span>
       
       {/* Placeholder for Ad Network Code (AdSense/AdMob/Unity) */}
       <div className="text-center opacity-50">
-        <p className="text-xs text-gray-400">Sponsored Advertisement</p>
-        <p className="text-[10px] text-gray-600 mt-1">Slot: {slot}</p>
+        <p className="text-xs text-gray-600 dark:text-gray-400">Sponsored Advertisement</p>
+        <p className="text-[10px] text-gray-500 dark:text-gray-600 mt-1">Slot: {slot}</p>
       </div>
 
       <button 
         onClick={() => setIsVisible(false)}
-        className="absolute top-1 left-1 p-1 hover:bg-white/10 rounded-full text-gray-500"
+        className="absolute top-1 left-1 p-1 hover:bg-black/5 dark:hover:bg-white/10 rounded-full text-gray-500"
       >
         <X size={10} />
       </button>
@@ -114,7 +114,7 @@ export const MoreAppsButton: React.FC<{lang: string}> = ({ lang }) => {
         <>
             <button 
                 onClick={() => setShowConfirm(true)}
-                className="mt-8 text-sm text-gray-400 hover:text-white underline decoration-dotted underline-offset-4 transition-colors"
+                className="mt-8 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white underline decoration-dotted underline-offset-4 transition-colors"
             >
                 {lang === 'en' ? 'More Apps by Us' : 'আমাদের আরও অ্যাপস'}
             </button>
