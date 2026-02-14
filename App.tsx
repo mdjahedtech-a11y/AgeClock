@@ -24,6 +24,7 @@ function App() {
   const [lang, setLang] = useState<Language>('en');
   const [theme, setTheme] = useState<ThemeMode>('dark');
   const [loading, setLoading] = useState(false);
+  const [generatedStatus, setGeneratedStatus] = useState(''); // Shared status state
   const resultRef = useRef<HTMLDivElement>(null);
 
   // Load Persisted Data
@@ -47,6 +48,7 @@ function App() {
   // Lang Handling
   useEffect(() => {
     localStorage.setItem('lang', lang);
+    setGeneratedStatus(''); // Reset shared status on lang change
   }, [lang]);
 
   const toggleTheme = () => setTheme(prev => prev === 'light' ? 'dark' : 'light');
@@ -57,7 +59,7 @@ function App() {
     setLoading(true);
     setResult(null);
 
-    // Track usage for ads logic (optional, mainly for session stats now)
+    // Track usage for ads logic
     const count = parseInt(sessionStorage.getItem('calculateCount') || '0');
     sessionStorage.setItem('calculateCount', (count + 1).toString());
 
@@ -70,10 +72,6 @@ function App() {
         if (res.isBirthday) {
           fireConfetti();
         }
-
-        // Removed the ad popup trigger here. 
-        // It is now handled in the BirthdayCardGenerator component on download click.
-
       } catch (e) {
         console.error(e);
       }
@@ -316,7 +314,7 @@ function App() {
                  </div>
               </div>
               
-              {/* Extra Stats - Calculated on the fly for display */}
+              {/* Extra Stats */}
               <div className="glass-card rounded-2xl p-4 overflow-x-auto">
                  <div className="flex justify-between min-w-[300px] divide-x divide-gray-300 dark:divide-white/10 text-center">
                     <div className="px-4 flex-1">
@@ -341,11 +339,19 @@ function App() {
                  </GlassButton>
               </div>
 
-              {/* Status Generator */}
-              <StatusGenerator lang={lang} />
+              {/* Status Generator - Updated to pass callback */}
+              <StatusGenerator 
+                lang={lang} 
+                onStatusChange={(text) => setGeneratedStatus(text)} 
+              />
 
-              {/* New Birthday Card Generator */}
-              <BirthdayCardGenerator age={result} name={name} lang={lang} />
+              {/* Birthday Card Generator - Updated to receive external status */}
+              <BirthdayCardGenerator 
+                age={result} 
+                name={name} 
+                lang={lang} 
+                externalStatus={generatedStatus}
+              />
               
               {/* Mid-Content Ad */}
               <div className="mt-8">

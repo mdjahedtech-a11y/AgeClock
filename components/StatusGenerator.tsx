@@ -7,9 +7,10 @@ import { GlassButton } from './ui/GlassButton';
 
 interface StatusGeneratorProps {
   lang: Language;
+  onStatusChange?: (text: string) => void;
 }
 
-export const StatusGenerator: React.FC<StatusGeneratorProps> = ({ lang }) => {
+export const StatusGenerator: React.FC<StatusGeneratorProps> = ({ lang, onStatusChange }) => {
   const [currentQuote, setCurrentQuote] = useState<StatusMessage>(BIRTHDAY_QUOTES[lang][0]);
   const [isCopied, setIsCopied] = useState(false);
 
@@ -22,6 +23,11 @@ export const StatusGenerator: React.FC<StatusGeneratorProps> = ({ lang }) => {
     }
     setCurrentQuote(newQuote);
     setIsCopied(false);
+    
+    // Notify parent to update Birthday Card
+    if (onStatusChange) {
+      onStatusChange(newQuote.text);
+    }
   };
 
   const copyToClipboard = () => {

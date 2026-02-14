@@ -10,9 +10,10 @@ interface Props {
   age: CalculatedAge;
   name: string;
   lang: Language;
+  externalStatus?: string;
 }
 
-export const BirthdayCardGenerator: React.FC<Props> = ({ age, name, lang }) => {
+export const BirthdayCardGenerator: React.FC<Props> = ({ age, name, lang, externalStatus }) => {
   const [selectedGradient, setSelectedGradient] = useState(CARD_GRADIENTS[0]);
   const [selectedFont, setSelectedFont] = useState<FontStyle>('handwriting');
   const [userImage, setUserImage] = useState<string | null>(null);
@@ -22,6 +23,13 @@ export const BirthdayCardGenerator: React.FC<Props> = ({ age, name, lang }) => {
   const [pendingDownload, setPendingDownload] = useState(false);
 
   const t = TRANSLATIONS[lang];
+
+  // Sync with StatusGenerator
+  useEffect(() => {
+    if (externalStatus) {
+      setStatusText(externalStatus);
+    }
+  }, [externalStatus]);
 
   useEffect(() => {
       const executeDownload = () => {
