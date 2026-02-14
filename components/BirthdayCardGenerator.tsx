@@ -129,7 +129,7 @@ export const BirthdayCardGenerator: React.FC<Props> = ({ age, name, lang, extern
             <motion.div 
                 ref={cardRef}
                 layout
-                className={`relative w-full max-w-sm aspect-[4/5] overflow-hidden shadow-2xl flex flex-col items-center justify-between text-center bg-gradient-to-br ${selectedGradient.gradient}`}
+                className={`relative w-full max-w-[320px] sm:max-w-sm aspect-[4/5] overflow-hidden shadow-2xl flex flex-col items-center justify-between text-center bg-gradient-to-br ${selectedGradient.gradient}`}
                 style={{ borderRadius: '24px' }}
             >
                 {/* Decorative Pattern Overlay */}
@@ -143,7 +143,7 @@ export const BirthdayCardGenerator: React.FC<Props> = ({ age, name, lang, extern
                          </p>
                     </div>
                     
-                    <h2 className={`text-4xl md:text-5xl ${selectedGradient.textColor} drop-shadow-[0_4px_4px_rgba(0,0,0,0.3)] leading-tight ${fontClassMap[selectedFont]}`}>
+                    <h2 className={`text-3xl sm:text-4xl md:text-5xl ${selectedGradient.textColor} drop-shadow-[0_4px_4px_rgba(0,0,0,0.3)] leading-tight ${fontClassMap[selectedFont]}`}>
                          {lang === 'en' ? 'Happy Birthday' : 'শুভ জন্মদিন'}
                     </h2>
                     <h3 className={`text-2xl md:text-3xl font-bold text-white mt-2 drop-shadow-md ${fontClassMap.fun}`}>

@@ -25,7 +25,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({ label, value, icon: Icon
         <Icon size={24} />
       </div>
       
-      <h3 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white mb-1 tracking-tight drop-shadow-sm">
+      <h3 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-1 tracking-tight drop-shadow-sm">
         {value}
       </h3>
       <p className="text-gray-600 dark:text-white/70 text-sm font-medium uppercase tracking-wider">{label}</p>

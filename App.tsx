@@ -272,8 +272,8 @@ function App() {
                 )}
               </div>
 
-              {/* Main Age Cards */}
-              <div className="grid grid-cols-3 gap-4">
+              {/* Main Age Cards - Responsive Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                  <ResultCard 
                     label={t.years} 
                     value={result.years} 
@@ -297,8 +297,8 @@ function App() {
                  />
               </div>
 
-              {/* Secondary Details */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Secondary Details - Responsive Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                  <div className="glass-card p-4 rounded-2xl flex items-center gap-4 hover:bg-white/40 dark:hover:bg-white/10 transition-colors">
                     <div className="p-3 bg-indigo-500/20 text-indigo-500 dark:text-indigo-400 rounded-full">
                       <Star size={20} />
@@ -342,20 +342,20 @@ function App() {
                  </div>
               </div>
               
-              {/* Extra Stats */}
-              <div className="glass-card rounded-2xl p-4 overflow-x-auto">
-                 <div className="flex justify-between min-w-[300px] divide-x divide-gray-300 dark:divide-white/10 text-center">
-                    <div className="px-4 flex-1">
-                       <p className="text-xs text-gray-500 dark:text-gray-400 uppercase">{t.weeks}</p>
-                       <p className="text-sm font-bold text-gray-800 dark:text-white">{(Math.floor(result.totalDays / 7)).toLocaleString()}</p>
+              {/* Extra Stats - Stacked on Mobile, Grid on Desktop */}
+              <div className="glass-card rounded-2xl p-6">
+                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-4 text-center divide-y sm:divide-y-0 sm:divide-x divide-gray-300 dark:divide-white/10">
+                    <div className="px-4 pb-2 sm:pb-0">
+                       <p className="text-xs text-gray-500 dark:text-gray-400 uppercase mb-1">{t.weeks}</p>
+                       <p className="text-lg font-bold text-gray-800 dark:text-white">{(Math.floor(result.totalDays / 7)).toLocaleString()}</p>
                     </div>
-                    <div className="px-4 flex-1">
-                       <p className="text-xs text-gray-500 dark:text-gray-400 uppercase">{t.hours}</p>
-                       <p className="text-sm font-bold text-gray-800 dark:text-white">{(result.totalDays * 24).toLocaleString()}</p>
+                    <div className="px-4 py-4 sm:py-0">
+                       <p className="text-xs text-gray-500 dark:text-gray-400 uppercase mb-1">{t.hours}</p>
+                       <p className="text-lg font-bold text-gray-800 dark:text-white">{(result.totalDays * 24).toLocaleString()}</p>
                     </div>
-                    <div className="px-4 flex-1">
-                       <p className="text-xs text-gray-500 dark:text-gray-400 uppercase">{t.minutes}</p>
-                       <p className="text-sm font-bold text-gray-800 dark:text-white">{(result.totalDays * 24 * 60).toLocaleString()}</p>
+                    <div className="px-4 pt-2 sm:pt-0">
+                       <p className="text-xs text-gray-500 dark:text-gray-400 uppercase mb-1">{t.minutes}</p>
+                       <p className="text-lg font-bold text-gray-800 dark:text-white">{(result.totalDays * 24 * 60).toLocaleString()}</p>
                     </div>
                  </div>
               </div>
@@ -399,12 +399,12 @@ function App() {
           </div>
         )}
 
-        <div className="flex flex-col items-center pb-20">
+        <div className="flex flex-col items-center pb-32">
            <MoreAppsButton lang={lang} />
         </div>
 
-        {/* Sticky Bottom Ad */}
-        <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/90 dark:bg-[#0f0f1a]/90 backdrop-blur-md border-t border-gray-200 dark:border-white/10 p-2 hidden md:block">
+        {/* Sticky Bottom Ad - Visible on Mobile */}
+        <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/90 dark:bg-[#0f0f1a]/90 backdrop-blur-md border-t border-gray-200 dark:border-white/10 p-2 block">
             <AdBanner slot="sticky-footer" className="max-w-4xl mx-auto !h-[60px]" />
         </div>
         
